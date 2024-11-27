@@ -1,0 +1,119 @@
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Abhaya Libre', serif;
+    background: black;
+    color: white;
+    height: 100%;
+}
+
+/* Navbar Styles */
+.navbar {
+    background: rgba(0, 0, 0, 0.8);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem 0;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: color 0.3s ease-in-out;
+}
+
+.menu li a:hover,
+.menu li a.active {
+    color: #00ff88;
+    text-shadow: 0 4px 6px rgba(0, 255, 136, 0.7);
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: url('/images/rays.png') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 14rem; /* Tamaño más grande */
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+    animation: fadeIn 2.0s ease-out;
+    letter-spacing: 0.3rem;
+}
+
+.subtitle {
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: #0cf085;
+    margin-top: 1rem;
+    animation: fadeInUp 2s ease-out;
+    text-transform: uppercase;
+    letter-spacing: 0.15rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Transition Effects */
+.hero, .menu li a {
+    transition: all 0.7s ease-in-out;
+}
+/* Animación del fondo */
+.hero {
+    height: 100vh;
+    background: url('/images/rays.png') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    animation: fadeInBackground 3s ease-in-out;
+}
+
+/* Nueva animación */
+@keyframes fadeInBackground {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

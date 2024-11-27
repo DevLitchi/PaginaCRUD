@@ -1,0 +1,345 @@
+/* General */
+body {
+    background-color: #f9f9f9;
+    /* Fondo claro */
+    font-family: 'Poppins', sans-serif;
+    /* Fuente moderna */
+    color: #444;
+    /* Texto oscuro */
+    margin: 0;
+}
+
+h1,
+h2,
+h5 {
+    color: #2c3e50;
+    /* Texto oscuro para encabezados */
+}
+
+/* Topper */
+.topper {
+    background-color: #000000;
+    /* Azul vibrante */
+    color: white;
+    padding: 15px 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-bottom: 3px solid #000000;
+    /* Separación visual */
+}
+
+.topper h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.topper .btn-success {
+    background-color: #0b5387;
+    /* Verde suave */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.topper .btn-success:hover {
+    background-color: #0e2637;
+    transform: scale(1.1);
+}
+
+.bottom {
+    background-color: #34495e;
+    /* Gris oscuro */
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    position: fixed;
+    /* Cambiado a fixed */
+    bottom: 0;
+    left: 0;
+    /* Añadido para asegurar que se ajuste al borde izquierdo */
+    width: 100%;
+    /* Asegura que abarque todo el ancho */
+    font-size: 14px;
+    box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    /* Para asegurarse de que esté sobre otros elementos */
+}
+
+.bottom p {
+    margin: 0;
+}
+
+
+/* Tarjetas de Proyecto */
+.card {
+    border: none;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-title {
+    font-weight: 600;
+    font-size: 18px;
+    color: #2980b9;
+}
+
+.title {
+    font-size: 14rem;
+    /* Tamaño más grande */
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+    animation: fadeIn 2.0s ease-out;
+    letter-spacing: 0.3rem;
+}
+
+.card-body p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Botones de las Tarjetas */
+.card .btn {
+    font-size: 14px;
+    padding: 8px 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.card .btn-info {
+    background-color: #0e2637;
+    /* Azul */
+    color: white;
+    border: none;
+}
+
+.card .btn-info:hover {
+    background-color: #3c5464;
+    /* Azul más oscuro */
+}
+
+.card .btn-viz {
+    background-color: #195208;
+    /* Azul */
+    color: white;
+    border: none;
+}
+
+.card .btn-viz:hover {
+    background-color: #4a813a;
+    /* Azul más oscuro */
+}
+
+.card .btn-admini {
+    background-color: #cd7f09;
+    /* Azul */
+    color: white;
+    border: none;
+}
+
+.card .btn-admini:hover {
+    background-color: #6f5123;
+    /* Azul más oscuro */
+}
+
+.card .btn-danger {
+    background-color: #e74c3c;
+    /* Rojo suave */
+    color: white;
+    border: none;
+}
+
+.card .btn-danger:hover {
+    background-color: #8b362c;
+    /* Rojo más oscuro */
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background-color: #0e2637;
+    color: white;
+    border-bottom: none;
+}
+
+.modal-body input,
+.modal-body textarea,
+.modal-body select {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-body input:focus,
+.modal-body textarea:focus,
+.modal-body select:focus {
+    border-color: #0e2637;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+.modal-footer .btn-primary {
+    background-color: #0e2637;
+    border: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.modal-footer .btn-primary:hover {
+    background-color: #0e2637;
+    transform: scale(1.05);
+}
+
+/* Animaciones */
+.card {
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tabs */
+.nav-tabs .nav-link {
+    font-weight: bold;
+    color: #555;
+    border: none;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #0e2637;
+    color: white;
+    border-radius: 8px;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #0e2637;
+}
+
+/* Estilo de Fondo Exitoso */
+.bg-success {
+    --bs-bg-opacity: 1;
+    background-color: rgb(7 19 27) !important;
+}
+
+/* Estilo del Título del Modal */
+.modal-title {
+    margin-bottom: 0;
+    line-height: var(--bs-modal-title-line-height);
+}
+
+/* Estilo de Encabezados */
+h5 {
+    color: #fff;
+    /* Texto oscuro */
+}
+
+.bg-info {
+    --bs-bg-opacity: 1;
+    background-color: rgb(7 19 27) !important;
+}
+
+/* Estilo uniforme para el grupo de botones */
+.button-group {
+    display: flex;
+    gap: 10px;
+    /* Espaciado entre botones */
+    align-items: center;
+    /* Alineación vertical */
+}
+
+/* Estilo para botones */
+.button-group .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    /* Forma redondeada */
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Botón "Admin" */
+.button-group .btn-success {
+    background-color: #3498db;
+    /* Azul */
+    border: none;
+    color: white;
+}
+
+.button-group .btn-success:hover {
+    background-color: #1d4b69;
+}
+
+/* Botón "Salir" */
+.button-group .btn-danger {
+    background-color: #e74c3c;
+    /* Rojo */
+    border: none;
+    color: white;
+}
+
+.button-group .btn-danger:hover {
+    background-color: #431c18;
+}
+
+.title-link {
+    text-decoration: none;
+    /* Sin subrayado */
+    display: inline-block;
+    /* Permite que se comporte como un botón */
+    cursor: pointer;
+    /* Cursor de botón */
+}
+
+.title-link h1 {
+    font-size: 2rem;
+    /* Tamaño del título */
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+    animation: fadeIn 2.0s ease-out;
+    letter-spacing: 0.3rem;
+    transition: all 0.3s ease;
+    /* Suaviza cambios */
+}
+
+.title-link h1:hover {
+    color: #f0f0f0;
+    /* Color más claro al pasar el mouse */
+    transform: scale(1.05);
+    /* Aumenta ligeramente el tamaño */
+}

@@ -1,0 +1,116 @@
+/* General Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Abhaya Libre', serif;
+    background: black;
+    color: white;
+    height: 100%;
+    text-align: center; /* Asegura que todos los textos estén centrados */
+}
+
+/* Navbar Styles */
+.navbar {
+    background: rgba(0, 0, 0, 0.8);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem 0;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: color 0.3s ease-in-out;
+}
+
+.menu li a:hover,
+.menu li a.active {
+    color: #00ff88;
+    text-shadow: 0 4px 6px rgba(0, 255, 136, 0.7);
+}
+
+/* Content Section */
+.content {
+    height: 100vh;
+    background: url('/images/rays.png') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    animation: fadeInBackground 3s ease-in-out;
+}
+
+.title {
+    font-size: 6rem;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 6px 12px rgba(0, 0, 0, 0.8);
+    letter-spacing: 0.3rem;
+    animation: fadeIn 2s ease-out;
+}
+
+.description {
+    font-size: 1.8rem;
+    line-height: 1.8;
+    max-width: 900px;
+    margin-top: 1rem;
+    color: #ffffff;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 2s ease-out;
+    text-align: center; /* Texto centrado */
+}
+
+.description li {
+    margin: 1rem 0;
+}
+
+.team-note {
+    margin-top: 2rem;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInBackground {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
