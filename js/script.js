@@ -1,16 +1,14 @@
 // Función para abrir el modal y cargar los detalles del proyecto
 function showProjectDetails(proyecto_id) {
-    // Mostrar el modal
     const modal = new bootstrap.Modal(document.getElementById('projectDetailsModal'));
     modal.show();
 
-    // Limpiar las pestañas antes de cargar nuevos datos
     clearTabs();
 
-    // Realizar solicitudes AJAX para obtener la información de cada pestaña
+    // Realizar solicitudes `fetch` para obtener la información de cada pestaña
     loadDevelopers(proyecto_id);
-    loadPendingTasks(proyecto_id);
-    loadCompletedTasks(proyecto_id);
+    loadTasks(proyecto_id, "pendiente", "pendingTasksTab");
+    loadTasks(proyecto_id, "finalizado", "completedTasksTab");
     calculateDaysRemaining(proyecto_id);
 }
 
@@ -22,73 +20,73 @@ function clearTabs() {
     document.getElementById("daysRemaining").innerText = '';
 }
 
-// Función para mostrar los detalles de los desarrolladores involucrados
-function loadDevelopers(proyecto_id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "get_workers.php?project_id=" + proyecto_id, true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            document.getElementById("developersTab").innerHTML = xhr.responseText;
+// Función para mostrar los desarrolladores involucrados
+async function loadDevelopers(proyecto_id) {
+    try {
+        const response = await fetch(`/db/get_workers.php?project_id=${proyecto_id}`);
+        if (response.ok) {
+            const html = await response.text();
+            document.getElementById("developersTab").innerHTML = html;
         }
-    };
-    xhr.send();
+    } catch (error) {
+        console.error("Error al cargar desarrolladores:", error);
+    }
 }
 
-// Función para mostrar las tareas pendientes
-function loadPendingTasks(proyecto_id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "get_tasks.php?project_id=" + proyecto_id + "&estado=pendiente", true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            document.getElementById("pendingTasksTab").innerHTML = xhr.responseText;
+// Función para mostrar tareas (pendientes o finalizadas)
+async function loadTasks(proyecto_id, estado, targetTabId) {
+    try {
+        const response = await fetch(`/db/get_tasks.php?project_id=${proyecto_id}&estado=${estado}`);
+        if (response.ok) {
+            const html = await response.text();
+            document.getElementById(targetTabId).innerHTML = html;
         }
-    };
-    xhr.send();
+    } catch (error) {
+        console.error(`Error al cargar tareas (${estado}):`, error);
+    }
 }
 
-// Función para mostrar las tareas finalizadas
-function loadCompletedTasks(proyecto_id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "get_tasks.php?project_id=" + proyecto_id + "&estado=finalizado", true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            document.getElementById("completedTasksTab").innerHTML = xhr.responseText;
-        }
-    };
-    xhr.send();
-}
-
-// Función para calcular los días restantes hasta la fecha de entrega
-function calculateDaysRemaining(proyecto_id) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "get_project_details.php?project_id=" + proyecto_id, true);
-    xhr.onload = function() {
-        if (xhr.status === 200) {
-            const projectDetails = JSON.parse(xhr.responseText);
+// Función para calcular días restantes
+async function calculateDaysRemaining(proyecto_id) {
+    try {
+        const response = await fetch(`/db/get_project_details.php?project_id=${proyecto_id}`);
+        if (response.ok) {
+            const projectDetails = await response.json();
             const currentDate = new Date();
             const endDate = new Date(projectDetails.fecha_fin);
             const remainingDays = Math.ceil((endDate - currentDate) / (1000 * 3600 * 24));
-            document.getElementById("daysRemaining").innerText = "Días restantes hasta la entrega final: " + remainingDays;
+            document.getElementById("daysRemaining").innerText = `Días restantes hasta la entrega final: ${remainingDays}`;
         }
-    };
-    xhr.send();
+    } catch (error) {
+        console.error("Error al calcular días restantes:", error);
+    }
 }
-function deleteProject(proyectoId) {
+
+// Función para eliminar un proyecto
+async function deleteProject(proyectoId) {
     if (confirm('¿Estás seguro de que deseas eliminar este proyecto? Los trabajadores permanecerán pero sin asignaciones.')) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', 'delete_project.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                const response = JSON.parse(xhr.responseText);
-                if (response.status === 'success') {
+        try {
+            const response = await fetch('/db/delete_project.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ projectId: proyectoId }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.status === 'success') {
                     alert('Proyecto eliminado con éxito.');
-                    location.reload(); // Recargar la página
+                    location.reload();
                 } else {
-                    alert('Error al eliminar el proyecto: ' + response.message);
+                    alert('Error al eliminar el proyecto: ' + result.message);
                 }
+            } else {
+                alert('Error al eliminar el proyecto.');
             }
-        };
-        xhr.send(JSON.stringify({ projectId: proyectoId }));
+        } catch (error) {
+            console.error("Error al eliminar el proyecto:", error);
+        }
     }
 }

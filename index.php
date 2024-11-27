@@ -12,61 +12,60 @@ error_reporting(E_ALL);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proyectos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    </head>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
 
 <body>
     <!-- Topper -->
     <div class="topper d-flex justify-content-between align-items-center px-4 py-3">
-    <a href="home.html" class="title-link">
-    <h1 class="title">T-MIGHT</h1>
-</a>
+        <a href="home.html" class="title-link">
+            <h1 class="title">T-MIGHT</h1>
+        </a>
 
 
-    
-    <div class="button-group">
+
+        <div class="button-group">
             <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addModal">Agregar ➕</button>
             <button class="btn btn-danger" onclick="location.href='home.html';">Salir 📤</button>
         </div>
 
     </div>
-    
+
     <!-- Contenido Principal -->
     <div class="container mt-4">
         <h2 class="text-center mb-4">Sistema de Administrador</h2>
 
         <section id="projects" class="row">
             <?php
-            // Conectar a la base de datos y obtener los proyectos
-            include 'db_connect.php';
+            include './db/db_connect.php';
 
             $query = "SELECT * FROM proyectos";
             $result = mysqli_query($conn, $query);
 
             if (!$result) {
-                die('Error en la consulta: ' . mysqli_error($conn)); // Mostrar error de consulta
+                die('Error en la consulta: ' . mysqli_error($conn));
             }
 
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "
-                        <div class='col-md-4 mb-4'>
-                            <div class='card' style='border-radius: 10px;'>
-                                <div class='card-body'>
-                                    <h5 class='card-title'>" . htmlspecialchars($row['nombre']) . "</h5>
-                                    <p><strong>Descripción:</strong> " . htmlspecialchars($row['descripcion']) . "</p>
-                                    <p><strong>📅Inicio:</strong> " . htmlspecialchars($row['fecha_inicio']) . "<strong><br>📅Entrega: </strong>" . htmlspecialchars($row['fecha_fin']) . "</p>
-                                    <div class='d-flex justify-content-between'>
-                                        <button class='btn btn-info' onclick='showProjectDetails(" . $row['id'] . ")'>Detalles</button>
-                                        <button class='btn btn-danger' onclick='deleteProject(" . $row['id'] . ")'>Eliminar</button>
-                                    </div>
-                                </div>
-                                <div class='card-footer text-muted'>
-                                    Proyecto # " . $row['id'] . "
-                                </div>
+                <div class='col-md-4 mb-4'>
+                    <div class='card' style='border-radius: 10px;'>
+                        <div class='card-body'>
+                            <h5 class='card-title'>" . htmlspecialchars($row['nombre']) . "</h5>
+                            <p><strong>Descripción:</strong> " . htmlspecialchars($row['descripcion']) . "</p>
+                            <p><strong>📅Inicio:</strong> " . htmlspecialchars($row['fecha_inicio']) . "<strong><br>📅Entrega: </strong>" . htmlspecialchars($row['fecha_fin']) . "</p>
+                            <div class='d-flex justify-content-between'>
+                                <button class='btn btn-info' onclick='showProjectDetails(" . $row['id'] . ")'>Detalles</button>
+                                <button class='btn btn-danger' onclick='deleteProject(" . $row['id'] . ")'>Eliminar</button>
                             </div>
                         </div>
-                    ";
+                        <div class='card-footer text-muted'>
+                            Proyecto # " . $row['id'] . "
+                        </div>
+                    </div>
+                </div>
+            ";
                 }
             } else {
                 echo "<p>No hay proyectos disponibles.</p>";
@@ -76,9 +75,10 @@ error_reporting(E_ALL);
             ?>
         </section>
 
+
         <footer class="bottom py-3 text-center text-white">
-        <p class="m-0">© <?php echo date("Y"); ?> Gestión de Proyectos - Todos los derechos reservados.</p>
-    </footer>
+            <p class="m-0">© <?php echo date("Y"); ?> Gestión de Proyectos - Todos los derechos reservados.</p>
+        </footer>
 
         <!-- Modal para Agregar Proyecto, Trabajador o Tarea -->
         <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
@@ -86,7 +86,7 @@ error_reporting(E_ALL);
                 <div class="modal-content">
                     <div class="modal-header bg-success text-white">
                         <h5 class="modal-title" id="addModalLabel">Administrador</h5>
-                        
+
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -117,7 +117,7 @@ error_reporting(E_ALL);
                     </div>
                     <div class="modal-body">
                         <!-- Formulario para agregar proyecto -->
-                        <form action="upload_project.php" method="POST">
+                        <form id="projectForm">
                             <div class="mb-3">
                                 <label for="projectName" class="form-label">Nombre del Proyecto</label>
                                 <input type="text" class="form-control" id="projectName" name="projectName" required>
@@ -136,10 +136,44 @@ error_reporting(E_ALL);
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar Proyecto</button>
                         </form>
+                        <div id="responseMessage" class="mt-3"></div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            document.getElementById('projectForm').addEventListener('submit', async function(e) {
+                e.preventDefault(); // Evitar que el formulario recargue la página
+
+                const formData = new FormData(this); // Recoger los datos del formulario
+
+                try {
+                    const response = await fetch('./db/upload_project.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json(); // Asumimos que el servidor devuelve JSON
+                    const messageDiv = document.getElementById('responseMessage');
+                    if (response.ok) {
+                        //Recaargar la página después de agregar un proyecto
+                        messageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+                        this.reset(); // Reiniciar el formulario después del envío exitoso
+                        //Esperar 2 segundos antes de recargar la página
+                        setTimeout(() => window.location.reload(), 5000);
+
+                    } else {
+                        messageDiv.innerHTML = `<div class="alert alert-danger">${result.error}</div>`;
+                    }
+                } catch (error) {
+                    document.getElementById('responseMessage').innerHTML = `
+                <div class="alert alert-danger">Error al enviar los datos: ${error.message}</div>
+            `;
+                }
+            });
+        </script>
+
 
 
 
@@ -153,7 +187,7 @@ error_reporting(E_ALL);
                     </div>
                     <div class="modal-body">
                         <!-- Formulario para agregar trabajador -->
-                        <form action="upload_workers.php" method="POST">
+                        <form id="workerForm">
                             <div class="mb-3">
                                 <label for="workerName" class="form-label">Nombre del Trabajador</label>
                                 <input type="text" class="form-control" id="workerName" name="workerName" required>
@@ -171,7 +205,7 @@ error_reporting(E_ALL);
                                 <select class="form-select" id="projectAssociation" name="proyecto_id" required>
                                     <option value="">Seleccione un Proyecto</option>
                                     <?php
-                                    include 'db_connect.php';
+                                    include './db/db_connect.php';
                                     $query = "SELECT id, nombre FROM proyectos";
                                     $result = mysqli_query($conn, $query);
                                     while ($project = mysqli_fetch_assoc($result)) {
@@ -183,11 +217,39 @@ error_reporting(E_ALL);
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar Trabajador</button>
                         </form>
-
+                        <div id="workerResponseMessage" class="mt-3"></div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            document.getElementById('workerForm').addEventListener('submit', async function(e) {
+                e.preventDefault(); // Evitar que el formulario recargue la página
+
+                const formData = new FormData(this); // Recoger los datos del formulario
+
+                try {
+                    const response = await fetch('./db/upload_workers.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json(); // Asumimos que el servidor devuelve JSON
+                    const messageDiv = document.getElementById('workerResponseMessage');
+                    if (response.ok) {
+                        messageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+                        this.reset(); // Reiniciar el formulario después del envío exitoso
+                    } else {
+                        messageDiv.innerHTML = `<div class="alert alert-danger">${result.error}</div>`;
+                    }
+                } catch (error) {
+                    document.getElementById('workerResponseMessage').innerHTML = `
+                <div class="alert alert-danger">Error al enviar los datos: ${error.message}</div>
+            `;
+                }
+            });
+        </script>
 
 
 
@@ -201,7 +263,7 @@ error_reporting(E_ALL);
                     </div>
                     <div class="modal-body">
                         <!-- Formulario para agregar tarea -->
-                        <form action="upload_tasks.php" method="post">
+                        <form id="taskForm">
                             <div class="mb-3">
                                 <label for="taskName" class="form-label">Nombre de la Tarea</label>
                                 <input type="text" class="form-control" id="taskName" name="taskName" required>
@@ -223,7 +285,7 @@ error_reporting(E_ALL);
                                 <select class="form-select" id="taskAssociation" name="taskProject" required>
                                     <option value="">Seleccione un Proyecto</option>
                                     <?php
-                                    include 'db_connect.php';
+                                    include './db/db_connect.php';
                                     $query = "SELECT id, nombre FROM proyectos";
                                     $result = mysqli_query($conn, $query);
                                     while ($project = mysqli_fetch_assoc($result)) {
@@ -237,7 +299,7 @@ error_reporting(E_ALL);
                                 <label for="taskWorkers" class="form-label">Seleccionar Trabajador</label>
                                 <select class="form-select" id="taskWorkers" name="taskWorkers[]" multiple required>
                                     <?php
-                                    include 'db_connect.php';
+                                    include './db/db_connect.php';
                                     $query = "SELECT id, nombre FROM trabajadores";
                                     $result = mysqli_query($conn, $query);
                                     while ($worker = mysqli_fetch_assoc($result)) {
@@ -250,11 +312,40 @@ error_reporting(E_ALL);
                             <input type="hidden" name="taskStatus" value="pendiente">
                             <button type="submit" class="btn btn-primary">Guardar Tarea</button>
                         </form>
-
+                        <div id="taskResponseMessage" class="mt-3"></div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <script>
+            document.getElementById('taskForm').addEventListener('submit', async function(e) {
+                e.preventDefault(); // Evitar recargar la página
+
+                const formData = new FormData(this); // Recoger los datos del formulario
+
+                try {
+                    const response = await fetch('./db/upload_tasks.php', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const result = await response.json(); // Manejar la respuesta en formato JSON
+                    const messageDiv = document.getElementById('taskResponseMessage');
+                    if (response.ok) {
+                        messageDiv.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+                        this.reset(); // Reiniciar el formulario tras el éxito
+                    } else {
+                        messageDiv.innerHTML = `<div class="alert alert-danger">${result.error}</div>`;
+                    }
+                } catch (error) {
+                    document.getElementById('taskResponseMessage').innerHTML = `
+                <div class="alert alert-danger">Error al enviar los datos: ${error.message}</div>
+            `;
+                }
+            });
+        </script>
+
         <!-- Modal con pestañas -->
         <div id="projectDetailsModal" class="modal fade" tabindex="-1" aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -287,9 +378,9 @@ error_reporting(E_ALL);
             </div>
         </div>
         <!-- Mordal con edicion -->
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="script.js"></script>
+        <script src="/js/script.js"></script>
 </body>
 
 </html>
